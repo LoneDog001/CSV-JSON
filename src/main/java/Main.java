@@ -29,11 +29,13 @@ public class Main {
         String fileNameJSON2 = "data2.json";
         String fileNameXML = "data.xml";
         String json = listToJson(list);
-        writer(json,fileNameJSON);
+        writer(json, fileNameJSON);
         List<Employee> list2 = parseXML(fileNameXML);
         String json2 = listToJson(list2);
-        writer(json2,fileNameJSON2);
+        writer(json2, fileNameJSON2);
     }
+
+
     public static String listToJson(List<Employee> list) {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
@@ -48,13 +50,13 @@ public class Main {
         }
     }
 
-    public static List<Employee> parseCSV(String[] columnMapping, String fileName) {
+    public static List<Employee> parseCSV(String[] columnMapping, String fileNameCSV) {
         List<Employee> list = null;
-        try (CSVReader csvReader = new CSVReader(new FileReader("data.csv"))) {
+        try (CSVReader csvReader = new CSVReader(new FileReader(fileNameCSV))) {
             ColumnPositionMappingStrategy<Employee> strategy =
                     new ColumnPositionMappingStrategy<>();
             strategy.setType(Employee.class);
-            strategy.setColumnMapping("id", "firstName", "lastName", "country", "age");
+            strategy.setColumnMapping(columnMapping);
             CsvToBean<Employee> csv = new CsvToBeanBuilder<Employee>(csvReader)
                     .withMappingStrategy(strategy)
                     .build();
@@ -70,7 +72,7 @@ public class Main {
         List<Employee> list = new ArrayList<>();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(new File("data.xml"));
+        Document doc = builder.parse(new File(s));
         Node root = doc.getDocumentElement();
         NodeList nodeList = root.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
